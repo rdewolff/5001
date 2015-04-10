@@ -102,3 +102,9 @@ Template.create.events({
     Session.set('page', 'room');
   }
 });
+
+Template.room.events({
+  'click #start':function() {
+    Session.set('page', 'startGame');
+  }
+});
