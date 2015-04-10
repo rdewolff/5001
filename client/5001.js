@@ -1,30 +1,9 @@
-if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
-
-  Template.main.helpers({
-    counter: function () {
-      return Session.get('counter');
-    }
-  });
-
-  Template.main.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
-    }
-  });
-}
-
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-    // code to run on server at startup
-  });
-}
 
 Template.main.rendered = function() {
 
   console.log('rendered!');
+
+  Session.set('page', 'home');
 
   var scripts = document.getElementById('scripts');
   var script;
@@ -64,3 +43,62 @@ Template.main.rendered = function() {
     dice_initialize(document.body, window.innerWidth - 1, window.innerHeight - 1);
   }, 400);
 }
+
+Template.container.helpers({
+  getSessionPage : function() {
+    console.log('session page', Session.get('page'));
+    return Session.get('page');
+  }
+});
+
+/**
+* Home
+*/
+Template.home.events({
+  'click #login': function() {
+    console.log('login');
+    Session.set('page', 'login');
+  },
+  'click #guest': function() {
+    console.log('guest');
+    Session.set('page', 'guest');
+  },
+  'click #rules': function() {
+    console.log('rules');
+    Session.set('page', 'rules');
+  },
+});
+
+/**
+* Login
+*/
+
+/**
+* Rules
+*/
+Template.rules.events({
+  'click #home':function() {
+    Session.set('page', 'home');
+  }
+})
+
+/**
+* Guest
+*/
+Template.guest.events({
+  'click #submit':function() {
+    Session.set('page', 'list');
+  }
+});
+
+Template.list.events({
+  'click #create':function() {
+    Session.set('page', 'create');
+  }
+});
+
+Template.create.events({
+  'click #submit':function() {
+    Session.set('page', 'room');
+  }
+});

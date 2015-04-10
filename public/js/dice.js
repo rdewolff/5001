@@ -307,7 +307,7 @@
 
     this.stringify_notation = function(nn) {
         var dict = {}, notation = '';
-        for (var i in nn.set) 
+        for (var i in nn.set)
             if (!dict[nn.set[i]]) dict[nn.set[i]] = 1; else ++dict[nn.set[i]];
         for (var i in dict) {
             if (notation.length) notation += ' + ';
@@ -382,7 +382,7 @@
         this.world.addContactMaterial(new CANNON.ContactMaterial(
                     this.dice_body_material, this.dice_body_material, 0, 0.5));
 
-        this.desk = new THREE.Mesh(new THREE.PlaneGeometry(this.w * 2, this.h * 2, 1, 1), 
+        this.desk = new THREE.Mesh(new THREE.PlaneGeometry(this.w * 2, this.h * 2, 1, 1),
                 new THREE.MeshLambertMaterial({ color: 0xffffff }));
         this.desk.receiveShadow = true;
         this.scene.add(this.desk);
@@ -510,7 +510,7 @@
         this.running = false;
         var dice;
         while (dice = this.dices.pop()) {
-            this.scene.remove(dice); 
+            this.scene.remove(dice);
             if (dice.body) this.world.remove(dice.body);
         }
         if (this.pane) this.scene.remove(this.pane);
@@ -587,7 +587,7 @@
     }
 
     this.dice_box.prototype.search_dice_by_mouse = function(ev) {
-        var intersects = (new THREE.Raycaster(this.camera.position, 
+        var intersects = (new THREE.Raycaster(this.camera.position,
                     (new THREE.Vector3((ev.clientX - this.cw) / this.aspect,
                                        (ev.clientY - this.ch) / this.aspect, this.w / 9))
                     .sub(this.camera.position).normalize())).intersectObjects(this.dices);
@@ -595,9 +595,10 @@
     }
 
     this.dice_box.prototype.draw_selector = function() {
+      console.log('draw_selector called');
         this.clear();
         var step = this.w / 4.5;
-        this.pane = new THREE.Mesh(new THREE.PlaneGeometry(this.cw * 20, this.ch * 20, 1, 1), 
+        this.pane = new THREE.Mesh(new THREE.PlaneGeometry(this.cw * 20, this.ch * 20, 1, 1),
                 new THREE.MeshPhongMaterial({ color: 0, ambient: 0xfbfbfb, emissive: 0 }));
         this.pane.receiveShadow = true;
         this.pane.position.set(0, 0, 1);
@@ -610,6 +611,31 @@
             dice.position.set(pos * step, 0, step * 0.5);
             dice.castShadow = true;
             dice.userData = that.known_types[i];
+            this.dices.push(dice); this.scene.add(dice);
+        }
+
+        this.running = (new Date()).getTime();
+        this.last_time = 0;
+        this.__selector_animate(this.running);
+    }
+
+    // special version of draw_selector that display only 5d6
+    this.dice_box.prototype.draw_5d6 = function() {
+        this.clear();
+        var step = this.w / 4.5;
+        this.pane = new THREE.Mesh(new THREE.PlaneGeometry(this.cw * 20, this.ch * 20, 1, 1),
+                new THREE.MeshPhongMaterial({ color: 0, ambient: 0xfbfbfb, emissive: 0 }));
+        this.pane.receiveShadow = true;
+        this.pane.position.set(0, 0, 1);
+        this.scene.add(this.pane);
+
+        var mouse_captured = false;
+
+        for (var i = 0, pos = -2; i < 5; ++i, ++pos) {
+            var dice = $t.dice['create_' + that.known_types[1]]();
+            dice.position.set(pos * step, 0, step * 0.5);
+            dice.castShadow = true;
+            dice.userData = that.known_types[1];
             this.dices.push(dice); this.scene.add(dice);
         }
 
@@ -676,4 +702,3 @@
 
 
 }).apply(teal.dice = teal.dice || {});
-

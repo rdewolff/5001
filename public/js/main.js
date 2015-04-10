@@ -1,13 +1,14 @@
 "use strict";
 
 function dice_initialize(container, w, h) {
+    // hide loading text once all ready
     $t.remove($t.id('loading_text'));
 
     var canvas = $t.id('canvas');
     canvas.style.width = w + 'px';
     canvas.style.height = h + 'px';
     var label = $t.id('label');
-    var set = $t.id('set');
+    var set = $t.id('set'); // where you choose the dice to launch
     var selector_div = $t.id('selector_div');
     var info_div = $t.id('info_div');
     on_set_change();
@@ -19,18 +20,21 @@ function dice_initialize(container, w, h) {
     $t.bind(set, 'focus', function(ev) { $t.set(container, { class: '' }); });
     $t.bind(set, 'blur', function(ev) { $t.set(container, { class: 'svg' }); });
 
+    // clear action
     $t.bind($t.id('clear'), ['mouseup', 'touchend', 'touchcancel'], function(ev) {
         ev.stopPropagation();
         set.value = '0';
         on_set_change();
     });
 
+    // create the dice box
     var box = new $t.dice.dice_box(canvas);
 
     function show_selector() {
         info_div.style.display = 'none';
         selector_div.style.display = 'inline-block';
-        box.draw_selector();
+        // box.draw_selector(); // create all the existing dice type TODO: remove this !
+        box.draw_5d6();
     }
 
     function before_roll(vectors) {
@@ -45,7 +49,7 @@ function dice_initialize(container, w, h) {
     function after_roll(notation, result) {
         var res = result.join(' ');
         if (notation.constant) res += ' +' + notation.constant;
-        if (result.length > 1) res += ' = ' + 
+        if (result.length > 1) res += ' = ' +
                 (result.reduce(function(s, a) { return s + a; }) + notation.constant);
         label.innerHTML = res;
         info_div.style.display = 'inline-block';
@@ -69,6 +73,7 @@ function dice_initialize(container, w, h) {
         }
     });
 
+    // handle action on URL parameters
     var params = $t.get_url_params();
     if (params.notation) {
         set.value = params.notation;
