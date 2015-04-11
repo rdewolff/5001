@@ -56,15 +56,12 @@ Template.container.helpers({
 */
 Template.home.events({
   'click #login': function() {
-    console.log('login');
     Session.set('page', 'login');
   },
   'click #guest': function() {
-    console.log('guest');
     Session.set('page', 'guest');
   },
   'click #rules': function() {
-    console.log('rules');
     Session.set('page', 'rules');
   },
 });
@@ -86,7 +83,18 @@ Template.rules.events({
 * Guest
 */
 Template.guest.events({
-  'click #submit':function() {
+  'click #submit':function(ev) {
+
+    var name = document.getElementById('name').value;
+
+    Players.insert({
+      name : name,
+      guest : true,
+      date : +new Date // timestamp
+    });
+
+    console.log('name', name);
+
     Session.set('page', 'list');
   }
 });
@@ -99,6 +107,21 @@ Template.list.events({
 
 Template.create.events({
   'click #submit':function() {
+
+    var gameName = document.getElementById('gameName').value;
+    var maxPlayers = document.getElementById('maxPlayers').value;
+
+    console.log('gameName', gameName);
+    console.log('maxPlayers', maxPlayers);
+
+    Games.insert({
+      gameName: gameName,
+      maxPlayers : maxPlayers,
+      date: +new Date
+    });
+
+    console.log('inserted');
+
     Session.set('page', 'room');
   }
 });
