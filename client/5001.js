@@ -118,6 +118,7 @@ Template.create.events({
       gameName: gameName,
       maxPlayers : maxPlayers,
       date: +new Date
+      status: 'new'
     });
 
     console.log('inserted');
