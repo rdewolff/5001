@@ -94,16 +94,29 @@
   <div class="container">
     <div class="rows">
       <div class="col-xs-5">
-        Game name
+        <strong>Game name</strong>
       </div>
       <div class="col-xs-5">
-        # player
+        <strong># player</strong>
       </div>
       <div class="col-xs-2">
-        Action
+        <strong>Action</strong>
       </div>
     </div>
     <!-- display all games -->
+    {{#each games}}
+      <div class="rows">
+        <div class="col-xs-5">
+          {{ gameName }}
+        </div>
+        <div class="col-xs-5">
+          {{ maxPlayers }}
+        </div>
+        <div class="col-xs-2">
+          join
+        </div>
+      </div>
+    {{/each}}
     <div class="row">
       <div class="col-xs-12">
         <button class="btn btn-default" id="create">Create</button>

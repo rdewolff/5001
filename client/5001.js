@@ -105,6 +105,10 @@ Template.list.events({
   }
 });
 
+Template.list.helpers({
+  games : Games.find({})
+})
+
 Template.create.events({
   'click #submit':function() {
 
@@ -117,7 +121,7 @@ Template.create.events({
     Games.insert({
       gameName: gameName,
       maxPlayers : maxPlayers,
-      date: +new Date
+      date: +new Date,
       status: 'new'
     });
 
