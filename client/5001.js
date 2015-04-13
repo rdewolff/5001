@@ -69,6 +69,11 @@ Template.home.events({
 /**
 * Login
 */
+Template.login.events({
+  'click #home':function() {
+    Session.set('page', 'home');
+  }
+});
 
 /**
 * Rules
@@ -77,7 +82,7 @@ Template.rules.events({
   'click #home':function() {
     Session.set('page', 'home');
   }
-})
+});
 
 /**
 * Guest
@@ -96,6 +101,9 @@ Template.guest.events({
     console.log('name', name);
 
     Session.set('page', 'list');
+  },
+  'click #home':function() {
+    Session.set('page', 'home');
   }
 });
 
