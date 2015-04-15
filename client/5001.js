@@ -124,11 +124,29 @@ Template.guest.events({
 Template.list.events({
   'click #create':function() {
     Session.set('page', 'create');
+  },
+  'click #join':function(el) {
+
+    var gameId = $(el.target).parent().parent().attr('id');
+
+    // insert player in the game
+    Games.update(gameId,
+      {
+        $inc: {numberOfPlayers: 1},
+        $push: {
+          players : Session.get('player')
+        }
+      });
+
+    Session.set('page', 'room')
   }
 });
 
 Template.list.helpers({
-  games : Games.find({})
+  games : Games.find({}),
+  larger : function(a, b) {
+    return a > b;
+  }
 })
 
 Template.create.events({
@@ -143,8 +161,12 @@ Template.create.events({
     Games.insert({
       gameName: gameName,
       maxPlayers : maxPlayers,
+      numberOfPlayers : 1, // creating the room goes in it!
       date: +new Date,
-      status: 'new'
+      status: 'new',
+      players: [
+        Session.get('player')
+      ]
     });
 
     console.log('inserted');

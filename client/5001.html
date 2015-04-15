@@ -77,7 +77,7 @@
     </div>
     <div class="row">
       <div class="col-xs-12">
-        <input class="form-control" type="text" id="name" value="">
+        <input class="form-control" type="text" id="name" value="Yoshi">
       </div>
     </div>
     <div class="row">
@@ -123,15 +123,19 @@
     </div>
     <!-- display all games -->
     {{#each games}}
-      <div class="rows">
+      <div class="rows" id="{{_id}}">
         <div class="col-xs-5">
           {{ gameName }}
         </div>
         <div class="col-xs-5">
-          {{ maxPlayers }}
+          {{numberOfPlayers}}/{{ maxPlayers }}
         </div>
         <div class="col-xs-2">
-          join
+          {{#if larger maxPlayers numberOfPlayers }}
+            <button class="btn btn-default" id="join">Join</button>
+          {{else}}
+            full
+          {{/if}}
         </div>
       </div>
     {{/each}}
