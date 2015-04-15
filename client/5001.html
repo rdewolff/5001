@@ -9,9 +9,17 @@
 </body>
 
 <template name="container">
-  <h6>5001</h6>
+
+  <h5>5001
+  {{#if getPlayer}}
+    - Welcome {{ getPlayer.username }}!
+  {{/if}}
+  </h5>
+
   {{ > Template.dynamic template=getSessionPage }}
+
   <!-- TODO: put the 3d canvas here - load it only once -->
+
 </template>
 
 <template name="home">

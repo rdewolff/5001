@@ -48,6 +48,9 @@ Template.container.helpers({
   getSessionPage : function() {
     console.log('session page', Session.get('page'));
     return Session.get('page');
+  },
+  getPlayer : function() {
+    return Session.get('player');
   }
 });
 
@@ -92,15 +95,26 @@ Template.guest.events({
 
     var name = document.getElementById('name').value;
 
-    Players.insert({
-      name : name,
-      guest : true,
-      date : +new Date // timestamp
-    });
+    // simple validation, more than 3 characters
+    if (name.length > 3) {
 
-    console.log('name', name);
+      var player = {
+        username : name,
+        guest : true,
+        date : +new Date // timestamp
+      };
 
-    Session.set('page', 'list');
+      // insert player in database and save to session
+      Players.insert(player, function(err, id) {
+        Session.set('player', player)
+      });
+
+      console.log('name', name);
+
+      Session.set('page', 'list');
+    } else {
+      $('#name').parent().addClass('has-error');
+    }
   },
   'click #home':function() {
     Session.set('page', 'home');
