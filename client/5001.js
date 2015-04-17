@@ -199,9 +199,13 @@ Template.room.onCreated(function() {
 
   console.log('Template.room.onCreated() called!');
 
+  // once you enter a room, you observe the changes on this game
   Games.find({_id: Session.get('game')}).observe({
     changed: function(newGame, oldGame) {
       console.log('Current game changed. Status = ', newGame.status);
+      if (newGame.status === 'starting') {
+        Session.set('page', 'startGame');
+      }
     }
   });
 
