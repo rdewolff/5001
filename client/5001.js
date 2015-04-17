@@ -58,7 +58,10 @@ Template.registerHelper('getSessionPage', function() {
 Template.registerHelper('getGame', function() {
   return Session.get('game');
 });
-
+// test dynamic page change via DB
+Template.registerHelper('getGameStatus', function() {
+  return Games.findOne(Session.get('game')).status;
+})
 
 /**
 * Home
@@ -188,16 +191,16 @@ Template.create.events({
 /**
  * Room
  */
-Template.room.onCreated(function() {
-
-  console.log('Template.room.onCreated() called!');
-
-
-});
-
-Template.room.onDestroyed(function() {
-  // Games.after.update.remove();
-});
+// Template.room.onCreated(function() {
+//
+//   console.log('Template.room.onCreated() called!');
+//
+//
+// });
+//
+// Template.room.onDestroyed(function() {
+//   // Games.after.update.remove();
+// });
 
 Template.room.helpers({
   game : function() {

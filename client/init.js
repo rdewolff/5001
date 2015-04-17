@@ -21,26 +21,31 @@ Meteor.startup(function() {
 
 });
 
-// Games action
-Games.after.update(function(userId, doc, fieldNames, modifier, options){
-  /* debug :
-  console.log('userId', userId);
-  console.log('doc', doc);
-  console.log('fieldNames', fieldNames);
-  console.log('modifier', modifier);
-  console.log('options', options); */
-  // if change concern the game am in
-  console.log('Games.after.update() triggered');
-  console.log('doc._id', doc._id);
-  console.log('Session.get(game)', Session.get('game'));
-  console.log('fieldNames[0]', fieldNames[0]);
+/*
+// TODO: In the publish function, you can watch socket close event as follows
+this.session.socket.on "close", -> # do your thing
+*/
 
-  if (doc._id === Session.get('game')) {
-    if (fieldNames[0] === "status") {
-      if (modifier.$set.status === 'starting') {
-        console.log('switching page to startGame');
-        Session.set('page', 'startGame');
-      }
-    }
-  }
-});
+// // Games action
+// Games.after.update(function(userId, doc, fieldNames, modifier, options){
+//   /* debug :
+//   console.log('userId', userId);
+//   console.log('doc', doc);
+//   console.log('fieldNames', fieldNames);
+//   console.log('modifier', modifier);
+//   console.log('options', options); */
+//   // if change concern the game am in
+//   console.log('Games.after.update() triggered');
+//   console.log('doc._id', doc._id);
+//   console.log('Session.get(game)', Session.get('game'));
+//   console.log('fieldNames[0]', fieldNames[0]);
+//
+//   if (doc._id === Session.get('game')) {
+//     if (fieldNames[0] === "status") {
+//       if (modifier.$set.status === 'starting') {
+//         console.log('switching page to startGame');
+//         Session.set('page', 'startGame');
+//       }
+//     }
+//   }
+// });
