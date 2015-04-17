@@ -60,7 +60,11 @@ Template.registerHelper('getGame', function() {
 });
 // test dynamic page change via DB
 Template.registerHelper('getGameStatus', function() {
-  return Games.findOne(Session.get('game')).status;
+  var game = Games.findOne(Session.get('game'));
+  if (game)
+    return game.status;
+  else
+    return null;
 })
 
 /**
@@ -191,12 +195,18 @@ Template.create.events({
 /**
  * Room
  */
-// Template.room.onCreated(function() {
-//
-//   console.log('Template.room.onCreated() called!');
-//
-//
-// });
+Template.room.onCreated(function() {
+
+  console.log('Template.room.onCreated() called!');
+
+  Games.find({_id: Session.get('game')}).observe({
+    changed: function(newGame, oldGame) {
+      console.log('Current game changed. Status = ', newGame.status);
+    }
+  });
+
+
+});
 //
 // Template.room.onDestroyed(function() {
 //   // Games.after.update.remove();
