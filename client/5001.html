@@ -14,6 +14,7 @@
   {{#if getPlayer}}
     - Welcome {{ getPlayer.username }}!
   {{/if}}
+    - {{ getSessionPage }}
   </h5>
 
   {{ > Template.dynamic template=getSessionPage }}
@@ -213,8 +214,8 @@
           <button class="form-control btn btn-primary" id="start">Start game</button>
           {{else}}
           <button class="form-control" id="start">Start game</button>
-          <button class="form-control" id="drop">Drop game</button>
           {{/if}}
+          <button class="form-control" id="drop">Drop game</button>
         {{else}}
         Waiting for game owner to start the game
         {{/if}}

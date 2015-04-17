@@ -110,15 +110,10 @@ Template.guest.events({
         date : +new Date // timestamp
       };
 
-      // insert player in database and save to session
-      Players.insert(player, function(err, id) {
-        player._id = id;
+      Meteor.call('addPlayer', player, function(error, player) {
         Session.set('player', player)
-
         Session.set('page', 'list');
-
       });
-
 
     } else {
       $('#name').parent().addClass('has-error');
@@ -140,14 +135,8 @@ Template.list.events({
 
     var gameId = $(el.target).parent().parent().attr('id');
 
-    // insert player in the game
-    Games.update(gameId,
-      {
-        $inc: {numberOfPlayers: 1},
-        $push: {
-          players : Session.get('player')
-        }
-      });
+    Meteor.call('addGamePlayer', gameId, Session.get('player'));
+
     Session.set('game', gameId);
     Session.set('page', 'room');
   }
@@ -171,12 +160,13 @@ Template.create.events({
     var gameName = document.getElementById('gameName').value;
     var maxPlayers = parseInt(document.getElementById('maxPlayers').value);
     var player = Session.get('player');
+    var game;
     player.owner = true; // game owned by player who created it
 
     console.log('gameName', gameName);
     console.log('maxPlayers', maxPlayers);
 
-    Games.insert({
+    game = {
       gameName: gameName,
       maxPlayers : maxPlayers,
       numberOfPlayers : 1, // creating the room goes in it!
@@ -186,19 +176,29 @@ Template.create.events({
         player
       ],
       owner: Session.get('player')._id
-    }, function(err, gameId) {
+    }
 
+    Meteor.call('addGame', game, function(err, gameId) {
       Session.set('game', gameId);
       Session.set('page', 'room');
-
     });
-
   }
 });
 
 /**
  * Room
  */
+Template.room.onCreated(function() {
+
+  console.log('Template.room.onCreated() called!');
+
+
+});
+
+Template.room.onDestroyed(function() {
+  // Games.after.update.remove();
+});
+
 Template.room.helpers({
   game : function() {
     return Games.findOne(Session.get('game'));
@@ -213,16 +213,17 @@ Template.room.helpers({
 
 Template.room.events({
   'click #start':function() {
-    Games.update(Session.get('game'),
-      {
-        $set: {
-          status: 'starting'
-        }
-      });
-    Session.set('page', 'startGame');
+    console.log('starting game!');
+
+    Meteor.call('setGameStatus', Session.get('game'), 'starting')
+
+    // page change handled via collection hook
+    // Session.set('page', 'startGame');
   },
   'click #drop':function() {
-    Games.remove({_id: Session.get('game')});
+
+    Meteor.call('deleteGame', Session.get('game'));
+
     Session.set('game', '');
     Session.set('page', 'list');
   }
