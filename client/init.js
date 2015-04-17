@@ -8,8 +8,12 @@ Meteor.startup(function() {
 	$('body').attr('id', 'page-top');
 
 	// avoid quit game without knowing
-	window.onbeforeunload = function() {
+	// TODO: enable page unload protection
+	/*window.onbeforeunload = function() {
 		return "Voulez-vous vraiment quitter?";
-	};
+	};*/
+
+	// Display Mongol and JetSetter // TODO : remove in prod
+	Session.set("MeteorToys_display", true);
 
 });

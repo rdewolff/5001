@@ -148,7 +148,6 @@
 </template>
 
 <template name="create">
-
   <div class="container">
     <div class="row">
       <div class="col-xs-12">
@@ -182,14 +181,13 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <template name="room">
   <div class="container">
     <div class="row">
       <div class="col-xs-12">
-        <strong>Room</strong> XYZ
+        <strong>Room</strong> {{ game.gameName }}
       </div>
     </div>
     <div class="row">
@@ -197,16 +195,29 @@
         <strong>Players</strong>
       </div>
     </div>
+    {{#each game.players }}
     <div class="row">
       <div class="col-xs-12">
-        Rom<br>
-        John<br>
-        Pierre<br>
+        {{#if owner }}
+          <strong>{{ username }}</strong>
+        {{else}}
+          {{ username }}
+        {{/if}}
       </div>
     </div>
+    {{/each}}
     <div class="row">
       <div class="col-xs-12">
-        <button class="form-control" id="start">Start game</button>
+        {{#if isOwner}}
+          {{#if isFull}}
+          <button class="form-control btn btn-primary" id="start">Start game</button>
+          {{else}}
+          <button class="form-control" id="start">Start game</button>
+          {{/if}}
+        {{else}}
+        Waiting for game owner to start the game
+        {{/if}}
+
       </div>
     </div>
   </div>
@@ -215,7 +226,7 @@
 <template name="startGame">
   <div class="container">
     <div class="row">
-
+      {{getGame}}
     </div>
   </div>
 </template>

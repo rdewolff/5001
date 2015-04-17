@@ -1,4 +1,6 @@
-
+/**
+ * Add the JS sources once HTML rendered
+ */
 Template.main.rendered = function() {
 
   console.log('rendered!');
@@ -44,13 +46,22 @@ Template.main.rendered = function() {
   }, 400);
 }
 
+/**
+ * Global helpers
+ */
+// TODO: change to Template.registerHelper(name, function) to globally enable
 Template.container.helpers({
   getSessionPage : function() {
-    console.log('session page', Session.get('page'));
+    //console.log('session page', Session.get('page'));
     return Session.get('page');
   },
   getPlayer : function() {
+    //console.log('session player', Session.get('player'));
     return Session.get('player');
+  },
+  getGame : function() {
+    //console.log('session game', Session.get('game'));
+    return Session.get('game');
   }
 });
 
@@ -106,12 +117,14 @@ Template.guest.events({
 
       // insert player in database and save to session
       Players.insert(player, function(err, id) {
+        player._id = id;
         Session.set('player', player)
+
+        Session.set('page', 'list');
+
       });
 
-      console.log('name', name);
 
-      Session.set('page', 'list');
     } else {
       $('#name').parent().addClass('has-error');
     }
@@ -121,6 +134,9 @@ Template.guest.events({
   }
 });
 
+/**
+ * List
+ */
 Template.list.events({
   'click #create':function() {
     Session.set('page', 'create');
@@ -137,23 +153,30 @@ Template.list.events({
           players : Session.get('player')
         }
       });
-
-    Session.set('page', 'room')
+    Session.set('game', gameId);
+    Session.set('page', 'room');
   }
 });
 
 Template.list.helpers({
-  games : Games.find({}),
+  games : function() {
+    return Games.find({});
+  },
   larger : function(a, b) {
     return a > b;
   }
 })
 
+/**
+ * Create
+ */
 Template.create.events({
   'click #submit':function() {
 
     var gameName = document.getElementById('gameName').value;
-    var maxPlayers = document.getElementById('maxPlayers').value;
+    var maxPlayers = parseInt(document.getElementById('maxPlayers').value);
+    var player = Session.get('player');
+    player.owner = true; // game owned by player who created it
 
     console.log('gameName', gameName);
     console.log('maxPlayers', maxPlayers);
@@ -165,13 +188,31 @@ Template.create.events({
       date: +new Date,
       status: 'new',
       players: [
-        Session.get('player')
-      ]
+        player
+      ],
+      owner: Session.get('player')._id
+    }, function(err, gameId) {
+
+      Session.set('game', gameId);
+      Session.set('page', 'room');
+
     });
 
-    console.log('inserted');
+  }
+});
 
-    Session.set('page', 'room');
+/**
+ * Room
+ */
+Template.room.helpers({
+  game : function() {
+    return Games.findOne(Session.get('game'));
+  },
+  isOwner : function() {
+    return Games.findOne(Session.get('game')).owner === Session.get('player')._id;
+  },
+  isFull : function() {
+    return Games.findOne(Session.get('game')).maxPlayers === Games.findOne(Session.get('game')).numberOfPlayers;
   }
 });
 
