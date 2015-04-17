@@ -49,21 +49,16 @@ Template.main.rendered = function() {
 /**
  * Global helpers
  */
-// TODO: change to Template.registerHelper(name, function) to globally enable
-Template.container.helpers({
-  getSessionPage : function() {
-    //console.log('session page', Session.get('page'));
-    return Session.get('page');
-  },
-  getPlayer : function() {
-    //console.log('session player', Session.get('player'));
-    return Session.get('player');
-  },
-  getGame : function() {
-    //console.log('session game', Session.get('game'));
-    return Session.get('game');
-  }
+Template.registerHelper('getPlayer', function() {
+  return Session.get('player');
 });
+Template.registerHelper('getSessionPage', function() {
+  return Session.get('page');
+});
+Template.registerHelper('getGame', function() {
+  return Session.get('game');
+});
+
 
 /**
 * Home
@@ -218,6 +213,17 @@ Template.room.helpers({
 
 Template.room.events({
   'click #start':function() {
+    Games.update(Session.get('game'),
+      {
+        $set: {
+          status: 'starting'
+        }
+      });
     Session.set('page', 'startGame');
+  },
+  'click #drop':function() {
+    Games.remove({_id: Session.get('game')});
+    Session.set('game', '');
+    Session.set('page', 'list');
   }
 });

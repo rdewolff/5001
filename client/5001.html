@@ -156,7 +156,7 @@
     </div>
     <div class="row">
       <div class="col-xs-12">
-        <input class="form-control" type="text" id="gameName" value="">
+        <input class="form-control" type="text" id="gameName" value="{{ getPlayer.username }}'s game!">
       </div>
     </div>
     <div class="row">
@@ -213,6 +213,7 @@
           <button class="form-control btn btn-primary" id="start">Start game</button>
           {{else}}
           <button class="form-control" id="start">Start game</button>
+          <button class="form-control" id="drop">Drop game</button>
           {{/if}}
         {{else}}
         Waiting for game owner to start the game
