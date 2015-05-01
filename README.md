@@ -26,6 +26,7 @@ Cf. paper version.
 
 ## TODO
 
+- How to prevent player from cheating?
 - Detect when player close the browser or switch off his smartphone
 - Add CSS transitions with https://github.com/groupbuddies/meteor-bender
 
