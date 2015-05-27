@@ -2,7 +2,7 @@
 
 ## Game steps (state diagram)
 
-Cf. paper version.
+Cf. paper version, done in the Excel document.
 
 ## Logic
 
