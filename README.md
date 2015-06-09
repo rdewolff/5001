@@ -76,6 +76,10 @@ Server ends the game
 - Detect when player close the browser or switch off his smartphone
 - Add CSS transitions with https://github.com/groupbuddies/meteor-bender
 
+## Testing
+
+Added Mocha for automated testing. Cf [http://mochajs.org](http://mochajs.org) and [http://chaijs.com/api/assert](http://chaijs.com/api/assert) for more info. 
+
 ## Sources
 
 Uses the very nice [dice-js](https://github.com/jhamlet/dice-js) & [teal dice](http://a.teall.info/dice/) & [teal dice src](https://github.com/emanchado/3d-die-roller) lib!
